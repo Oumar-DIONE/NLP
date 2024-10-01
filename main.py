@@ -6,10 +6,21 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+import config
+
+config = config.import_yaml_config()
+DATA_PATH = config.get("data_path", "emails.csv")
+# Parameter
+import argparse
+parser = argparse.ArgumentParser(description="le nombre de voisins")
+parser.add_argument(
+    "--n_neighbors", type=int, default=5, help="un nombre de plus proche voisin à choisir"
+)
+args = parser.parse_args()
 
 
 # Load Data
-dataset = pd.read_csv("emails.csv")
+dataset = pd.read_csv(DATA_PATH)
 
 categorical = [var for var in dataset.columns if dataset[var].dtype == "O"]
 numerical = [var for var in dataset.columns if dataset[var].dtype != "O"]
@@ -31,7 +42,7 @@ x_test = scaler.transform(x_test)
 
 # Build model
 classifier = KNeighborsClassifier(
-    n_neighbors=2, p=2, metric="minkowski"
+    n_neighbors=args.n_neighbors, p=2, metric="minkowski"
 )  # by default n_neighbors= 5
 classifier.fit(x_train, y_train)
 # make prediction on test set
@@ -42,6 +53,6 @@ cm = confusion_matrix(y_test, y_pred)
 cr = classification_report(y_test, y_pred)
 accurace_ = accuracy_score(y_test, y_pred)
 print(f"{accurace_:.1%} de bonnes réponses sur les données de test pour validation")
-print(20 * "-")
+print("les nombres de voisins plus proches  est ", args.n_neighbors)
 print("matrice de confusion")
 print(cm)
