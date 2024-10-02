@@ -37,7 +37,14 @@ numerical = [var for var in dataset.columns if dataset[var].dtype != "O"]
 X, Y = build_features.encoder(dataset)
 
 x_train, y_train, x_test, y_test = build_features.split_scale(X, Y)
+#Sauvegarder le DataFrame dans un fichier CSV
+FILE1 = "/home/onyxia/work/classification_K_Nearest_Neighbour/data/derived/X.csv"
+FILE2 = "/home/onyxia/work/classification_K_Nearest_Neighbour/data/derived/y.csv"
 
+X.to_csv(FILE1, index=False, encoding='utf-8')
+Y.to_csv(FILE2, index=False, encoding='utf-8')
+
+print("Le fichier CSV a été sauvegardé avec succès.")
 # Build model
 
 classifier = train_evaluate.knn_model(n_neighbors=args.n_neighbors, x=x_train, y=y_train)

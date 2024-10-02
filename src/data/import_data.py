@@ -2,26 +2,91 @@
 import pandas as pd
 import config
 import boto3
-CONFIG_PATH = "/home/onyxia/work/classification_K_Nearest_Neighbour/configuration/config.yaml"
-config_dict = config.import_yaml_config(CONFIG_PATH)
-DATA_PATH = config_dict.get("data_path", "emails.csv")
-ENDPOINT_URL = config_dict.get("endpoint_url", "0000")
-ACCESS_KEY_ID = config_dict.get("aws_access_key_id", "00")
-SECRET_ACESS_KEY = config_dict.get("data_path", "00")
-SESSION_TOKEN = config_dict.get("aws_session_token", "00")
-
-s3 = boto3.client("s3",endpoint_url = ENDPOINT_URL,
-                  aws_access_key_id = ACCESS_KEY_ID , 
-                  aws_secret_access_key = SECRET_ACESS_KEY , 
-                  aws_session_token = SESSION_TOKEN )
-
-print(" succesful connexion to s3 !")
-print("SESSION_TOKEN : ", SESSION_TOKEN)
+from botocore.exceptions import NoCredentialsError, ClientError
 
 
-def load_data(config_path=DATA_PATH):
+def download_from_s3(bucket_name, s3_key, local_file, miniocl):
+
+    try:
+        # Téléchargez le fichier du bucket S3
+        miniocl.download_file(bucket_name, s3_key, local_file)
+        print(f"Fichier {s3_key} téléchargé avec succès dans {local_file}.")
     
-    data_path = config_dict.get("data_path", "emails.csv")
+    except NoCredentialsError:
+        print("Erreur : Aucune information d'identification valide n'a été trouvée.")
+    except ClientError as e:
+        print(f"Erreur lors du téléchargement du fichier : {e}")
+
+
+def load_data(CONFIG_PATH="/home/onyxia/work/classification_K_Nearest_Neighbour/configuration/config.yaml"):
+    
+    config_dict = config.import_yaml_config(CONFIG_PATH)
+    data_path = config_dict.get("data_path", "emails.csv")       # Chemin de destination local
+    path_in_s3 = config_dict.get("path_in_s3", "/.../")
+    bucket_name = config_dict.get("bucket_name", "odione") 
+    endpoint_url = config_dict.get("endpoint_url", "0000")
+    aws_access_key_id = config_dict.get("aws_access_key_id", "00")
+    aws_secret_access_key = config_dict.get("aws_secret_access_key", "00")
+    aws_session_token = config_dict.get("aws_session_token", "00")
+    # Créez une session S3
+    s3 = boto3.client("s3", endpoint_url=endpoint_url, aws_access_key_id=aws_access_key_id, 
+                  aws_secret_access_key=aws_secret_access_key, 
+                  aws_session_token=aws_session_token)
+
+    print(" succesful connexion to s3 !")
+    # Utilisation de la fonction
+
+    download_from_s3(bucket_name, path_in_s3, data_path, miniocl=s3)
     df = pd.read_csv(data_path)
-    return df
+    return df 
+
+   
+# Fonction pour télécharger un fichier sur S3
+def upload_to_s3(local_file, bucket_name, s3_key, miniocl):
+    """
+    Upload un fichier local vers un bucket S3.
+
+    :param local_file: Chemin du fichier local à envoyer.
+    :param bucket_name: Nom du bucket S3.
+    :param s3_key: Chemin et nom de fichier dans le bucket S3.
+    """
+    try:
+        # Téléchargement du fichier vers S3
+        miniocl.upload_file(local_file, bucket_name, s3_key)
+        print(f"Fichier {local_file} envoyé avec succès vers {bucket_name}/{s3_key}.")
     
+    except FileNotFoundError:
+        print(f"Erreur : Le fichier {local_file} n'existe pas.")
+    except NoCredentialsError:
+        print("Erreur : Aucune information d'identification valide n'a été trouvée.")
+    except ClientError as e:
+        if e.response['Error']['Code'] == '403':
+            print("Erreur 403 : Accès refusé. Vérifiez vos permissions S3.")
+        elif e.response['Error']['Code'] == '404':
+            print("Erreur 404 : Bucket introuvable.")
+        else:
+            print(f"Erreur lors de l'envoi du fichier : {e}")
+
+
+def save_data_in_s3(CONFIG_PATH="/home/onyxia/work/classification_K_Nearest_Neighbour/configuration/config.yaml"):
+    config_dict = config.import_yaml_config(CONFIG_PATH)
+    local_file = config_dict.get("local_file", "emails.csv")       # Chemin de destination local
+    path_in_s3 = config_dict.get("path_in_s3", "/.../")
+    bucket_name = config_dict.get("bucket_name", "odione") 
+    endpoint_url = config_dict.get("endpoint_url", "0000")
+    aws_access_key_id = config_dict.get("aws_access_key_id", "00")
+    aws_secret_access_key = config_dict.get("aws_secret_access_key", "00")
+    aws_session_token = config_dict.get("aws_session_token", "00")
+    # Créez une session S3
+    s3 = boto3.client("s3", endpoint_url=endpoint_url, aws_access_key_id=aws_access_key_id, 
+                  aws_secret_access_key=aws_secret_access_key, 
+                  aws_session_token=aws_session_token)
+
+    print(" succesful connexion to s3 !")
+    # Utilisation de la fonction
+
+    upload_to_s3(local_file, bucket_name, path_in_s3, miniocl=s3)
+    return  
+
+
+load_data()
