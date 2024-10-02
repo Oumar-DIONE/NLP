@@ -48,3 +48,6 @@ y_pred = train_evaluate.make_prediction(x_test, classifier)
 # Evaluate model
 print("les nombres de voisins plus proches  est ", args.n_neighbors)
 train_evaluate.evaluate(y_test, y_pred)
+
+
+
