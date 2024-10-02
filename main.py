@@ -1,20 +1,67 @@
 # Importing librairies
 
+import argparse
 import pandas as pd
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import accuracy_score, confusion_matrix, classification_report
+from sklearn.metrics import accuracy_score, confusion_matrix
 import config
+
+
+# Définition de fonction
+def encoder(data_set):
+    # use LabelEncoder to replace purchased (dependent variable) with 0 and 1
+    data_set["Email No."] = LabelEncoder().fit_transform(data_set["Email No."])
+    y = data_set["Prediction"]
+    x = data_set.drop(["Prediction"], axis=1)
+    return x, y
+
+
+def split_scale(x, y, test_size=0.3):
+    # Splitting the dataset  into  training  and test set
+    x, xt, y, yt = train_test_split(X, Y, test_size=test_size, random_state=0)
+    # func returns train and test data. It takes dataset and
+    # then split size test_size =0.3 means 30% data is for test and rest for training and random_state
+    scaler = StandardScaler()
+    x = scaler.fit_transform(x)  # apply on whole x data
+    xt = scaler.transform(xt)
+    return x, y, xt, yt
+
+
+def knn_model(n_neighbors, x, y, p=2, metric_="minkowski"):
+
+    model = KNeighborsClassifier(
+        n_neighbors, p=p, metric=metric_
+    )  # by default n_neighbors= 5
+    model.fit(x, y)
+    return model
+
+
+def make_prediction(x, model):
+    y = model.predict(x)
+    return y
+
+
+def evaluate(y1, y2):
+    cm = confusion_matrix(y1, y2)
+    accurace_ = accuracy_score(y1, y2)
+    print(f"{accurace_:.1%} de bonnes réponses sur les données de test pour validation")
+    print("les nombres de voisins plus proches  est ", args.n_neighbors)
+    print("matrice de confusion")
+    print(cm)
+
 
 config = config.import_yaml_config()
 DATA_PATH = config.get("data_path", "emails.csv")
 # Parameter
-import argparse
 parser = argparse.ArgumentParser(description="le nombre de voisins")
 parser.add_argument(
-    "--n_neighbors", type=int, default=5, help="un nombre de plus proche voisin à choisir"
+    "--n_neighbors",
+    type=int,
+    default=5,
+    help="un nombre de plus proche voisin à choisir",
 )
 args = parser.parse_args()
 
@@ -27,32 +74,20 @@ numerical = [var for var in dataset.columns if dataset[var].dtype != "O"]
 
 
 # Data preprocessing
-# use LabelEncoder to replace purchased (dependent variable) with 0 and 1
-dataset["Email No."] = LabelEncoder().fit_transform(dataset["Email No."])
-y = dataset["Prediction"]
-x = dataset.drop(["Prediction"], axis=1)
 
-# Splitting the dataset  into  training  and test set
-x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.3, random_state=0)
-# func returns train and test data. It takes dataset and
-# then split size test_size =0.3 means 30% data is for test and rest for training and random_state
-scaler = StandardScaler()
-x_train = scaler.fit_transform(x_train)  # apply on whole x data
-x_test = scaler.transform(x_test)
+# dataset["Email No."] = LabelEncoder().fit_transform(dataset["Email No."])
+
+X, Y = encoder(dataset)
+
+x_train, y_train, x_test, y_test = split_scale(X, Y)
 
 # Build model
-classifier = KNeighborsClassifier(
-    n_neighbors=args.n_neighbors, p=2, metric="minkowski"
-)  # by default n_neighbors= 5
-classifier.fit(x_train, y_train)
+
+classifier = knn_model(n_neighbors=args.n_neighbors, x=x_train, y=y_train)
 # make prediction on test set
-y_pred = classifier.predict(x_test)
+
+y_pred = make_prediction(x_test, classifier)
 
 # Evaluate model
-cm = confusion_matrix(y_test, y_pred)
-cr = classification_report(y_test, y_pred)
-accurace_ = accuracy_score(y_test, y_pred)
-print(f"{accurace_:.1%} de bonnes réponses sur les données de test pour validation")
-print("les nombres de voisins plus proches  est ", args.n_neighbors)
-print("matrice de confusion")
-print(cm)
+
+evaluate(y_test, y_pred)
