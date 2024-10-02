@@ -2,7 +2,7 @@ import os
 import yaml
 
 
-def import_yaml_config(filename_="config.yaml"):
+def import_yaml_config(filename_="/home/onyxia/work/classification_K_Nearest_Neighbour/configuration/config.yaml"):
     config = {}
     if os.path.exists(filename_):
         # lecture du fichier
