@@ -1,7 +1,9 @@
+#/home/headless/work/NLP
 # Importing librairies
 import sys
 import os
 import argparse
+
 # Ajouter le chemin du dossier 'src/data' dans sys.path
 sys.path.append(os.path.abspath("src/data"))
 sys.path.append(os.path.abspath("src/models"))
@@ -22,6 +24,7 @@ parser.add_argument(
 )
 args = parser.parse_args()
 CONFIG_PATH = "/home/onyxia/work/classification_K_Nearest_Neighbour/configuration/config.yaml"
+CONFIG_PATH = "/home/headless/work/NLP/config.yaml"
 
 # Load Data
 dataset = import_data.load_data(CONFIG_PATH)
@@ -40,7 +43,9 @@ x_train, y_train, x_test, y_test = build_features.split_scale(X, Y)
 #Sauvegarder le DataFrame dans un fichier CSV
 FILE1 = "/home/onyxia/work/classification_K_Nearest_Neighbour/data/derived/X.csv"
 FILE2 = "/home/onyxia/work/classification_K_Nearest_Neighbour/data/derived/y.csv"
-
+#Sauvegarder le DataFrame dans un fichier CSV
+FILE1 = "/home/headless/work/NLP/data/derived/X.csv"
+FILE2 = "/home/headless/work/NLP/data/derived/y.csv"
 X.to_csv(FILE1, index=False, encoding='utf-8')
 Y.to_csv(FILE2, index=False, encoding='utf-8')
 
