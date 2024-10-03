@@ -17,8 +17,8 @@ def download_from_s3(bucket_name, s3_key, local_file, miniocl):
     except ClientError as e:
         print(f"Erreur lors du téléchargement du fichier : {e}")
 
-
-def load_data(CONFIG_PATH="/home/onyxia/work/classification_K_Nearest_Neighbour/configuration/config.yaml"):
+#"/home/onyxia/work/classification_K_Nearest_Neighbour/configuration/config.yaml"
+def load_data(CONFIG_PATH="/home/headless/work/NLP/config.yaml"):
     
     config_dict = config.import_yaml_config(CONFIG_PATH)
     data_path = config_dict.get("data_path", "emails.csv")       # Chemin de destination local
@@ -67,8 +67,9 @@ def upload_to_s3(local_file, bucket_name, s3_key, miniocl):
         else:
             print(f"Erreur lors de l'envoi du fichier : {e}")
 
+#CONFIG_PATH="/home/onyxia/work/classification_K_Nearest_Neighbour/configuration/config.yaml")
 
-def save_data_in_s3(CONFIG_PATH="/home/onyxia/work/classification_K_Nearest_Neighbour/configuration/config.yaml"):
+def save_data_in_s3(CONFIG_PATH="/home/headless/work/NLP/config.yaml"):
     config_dict = config.import_yaml_config(CONFIG_PATH)
     local_file = config_dict.get("local_file", "emails.csv")       # Chemin de destination local
     path_in_s3 = config_dict.get("path_in_s3", "/.../")
