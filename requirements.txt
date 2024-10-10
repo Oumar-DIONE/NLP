@@ -13,6 +13,9 @@ platformdirs
 python-dateutil
 pytz
 PyYAML
+pylint
+black
+autopep8
 s3transfer
 scikit-learn
 scipy
