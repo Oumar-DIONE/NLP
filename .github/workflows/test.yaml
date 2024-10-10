@@ -26,3 +26,9 @@ jobs:
           pylint main.py --fail-under=6
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
+      - name: Check for confusion matrix in output
+        run: |
+          if grep -q "Confusion Matrix:" output.txt; then
+            echo "Confusion matrix found in output."
+          else
+            echo "Confusion matrix not found in output." && exit 1
