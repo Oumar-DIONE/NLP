@@ -11,23 +11,34 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v3  # Vérifie le code dans le dépôt
+
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v4  # Configure Python dans l'environnement
         with:
           python-version: '3.x'
           architecture: 'x64'
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          
       - name: Install pylint
-        run: pip install pylint  # Étape ajoutée pour installer pylint
+        run: pip install pylint  # Cette étape installe pylint
+
       - name: Test main.py with pylint
         run: |
-          pylint main.py --fail-under=0
+          pylint main.py --fail-under=6  # Vérifie la qualité du code avec pylint
+
+      - name: Run main.py and capture output
+        id: run-main
+        run: |
+          python main.py > output.txt  # Exécute le script et capture la sortie dans un fichier
+
       - name: Display Python version
-        run: python -c "import sys; print(sys.version)"
+        run: python -c "import sys; print(sys.version)"  # Affiche la version de Python
+
       - name: Check for confusion matrix in output
         run: |
           if grep -q "Confusion Matrix:" output.txt; then
