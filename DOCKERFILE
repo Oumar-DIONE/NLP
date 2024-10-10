@@ -1,0 +1,22 @@
+FROM ubuntu:22.04
+# Creation du repertoire qui va contenir l'ensemble des dossiers, scripts et fichiers nécessaires 
+# au bon fonctionnement de notre application 
+WORKDIR /classification_K_Nearest_Neighbour
+# creation de l'ensemble de ces sous dossiers
+RUN mkdir -p data configuration
+RUN mkdir -p data/raw data/derived
+# Install Python
+RUN apt-get -y update && \
+    apt-get install -y python3-pip
+# Install project dependencies
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY main.py .
+COPY src ./src
+COPY emails.csv ./data/raw/emails.csv
+COPY config.yaml ./configuration/config.yaml
+ENV DATA_PATH=/classification_K_Nearest_Neighbour/data/raw/emails.csv
+ENV CONFIG_PATH=/classification_K_Nearest_Neighbour/configuration/config.yaml
+COPY X.csv ./data/derived/X.csv
+COPY y.csv ./data/derived/y.csv
+CMD ["python3", "main.py"]
