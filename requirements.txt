@@ -16,6 +16,7 @@ PyYAML
 pylint
 black
 autopep8
+python-dotenv
 s3transfer
 scikit-learn
 scipy
