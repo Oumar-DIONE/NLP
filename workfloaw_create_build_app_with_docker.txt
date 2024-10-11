@@ -1,0 +1,54 @@
+J'ai reussi à créer ma première image docker qui est très bien connecté vec tous les environnements liée à mon livrable.
+voici le contenant de mon fichier .env 
+DATA_PATH=/NLP/data/raw/emails.csv
+CONFIG_PATH=/NLP/configuration/config.yaml
+Output_X_PATH=/NLP/data/derived/X.csv
+Output_Y_PATH=/NLP/data/derived/Y.csv
+BUCKET_NAME=odione
+ ce fichier je l'ai enregistrer sous format .txt dans mon local
+Le contenu de mon fichier de configuration:
+bucket_name : "odione"
+endpoint_url : "https://minio.lab.sspcloud.fr"
+aws_access_key_id : "T1X6A0CFSKM4OLFBVCH5"
+path_in_s3: "EMAIL_DATA/emails.csv"
+data_path : 
+aws_secret_access_key : "my_access_key"
+#aws_session_token: "my_token"
+le contenu de mon Dockerfile:
+FROM ubuntu:22.04
+# Créez le répertoire de travail
+RUN mkdir -p /NLP
+# Creation du repertoire qui va contenir l'ensemble des dossiers, scripts et fichiers nécessaires 
+# au bon fonctionnement de notre application 
+WORKDIR /NLP
+# creation de l'ensemble de ces sous dossiers
+RUN mkdir -p data configuration
+RUN mkdir -p data/raw data/derived
+# Install Python
+RUN apt-get -y update && \
+    apt-get install -y python3-pip
+# Install project dependencies
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+COPY main.py .
+COPY src ./src
+COPY env.txt .env
+COPY emails.csv ./data/raw/emails.csv
+COPY config.yaml ./configuration/config.yaml
+COPY X.csv ./data/derived/X.csv
+COPY Y.csv ./data/derived/Y.csv
+CMD ["python3", "main.py"]
+" le fichier .env contient de variable d'environnement qui définissent
+ des chemins d'accées tels que le chemin de stockage de temporaire de données"
+  Ensuite j'ai créer un fichier csv vide qui contiendra les données nommé eamils.csv dans le repertoire qui contient mon docker file
+  j'ai aussi ajouté à ce repertoire le fichier main.py de mon application ,deux fichiers vides X.csv etY.csv pour y stocker  des données# voir le code du main,
+  puis j'ai copie le requirements.txt, le dossier src dans le repertoire local qui contient le docker file.
+  Aprés ce travail , j'ai ouvert une invité de commande Ubuntu (Windows puis taper ubuntu)
+  ensuite je me suis mis sur le repertoire -Conteneuriser-qui contient mon docker file (ainsi que tous les fichiers/et au dossier décrits c- haut ) 
+  avec la commande 
+   cd ""/mnt/cUsers/DIONE Oumar/Desktop/Conteneuriser"
+Une fois ceci fait, j'ai executé la commande 
+docker build .t nom_appli
+Et pour s'assurer du bon fonction de mon application, j'ai ensuite tapé 
+build run -it mon_appli
+et j'ai ma matrice de confusion.
