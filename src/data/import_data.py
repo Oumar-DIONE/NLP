@@ -108,7 +108,7 @@ def upload_to_s3(local_file, bucket_name, s3_key, miniocl):
 # CONFIG_PATH="/home/onyxia/work/classification_K_Nearest_Neighbour/configuration/config.yaml")
 
 
-def save_data_in_s3(config_path,local_file,path_in_s3):
+def save_data_in_s3(config_path, local_file, path_in_s3):
     """ what are the parameters of this functions and what it  does"""
     config_dict = config.import_yaml_config(config_path)
     # Chemin de destination local

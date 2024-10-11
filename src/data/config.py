@@ -3,9 +3,6 @@ import os
 import yaml
 
 
-# filename_="/home/onyxia/work/classification_K_Nearest_Neighbour/configuration/config.yaml"
-
-
 def import_yaml_config(filename_="/home/headless/work/NLP/config.yaml"):
     """
     Cette fonction permet de récuper les élements de configurations notamment 
