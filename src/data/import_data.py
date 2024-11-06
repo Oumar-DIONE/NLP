@@ -48,7 +48,7 @@ def download_from_s3(bucket_name, s3_key, local_file, minio_client):
 # "/home/onyxia/work/NLP/configuration/config.yaml"
 
 
-def load_data(config_path,data_path):
+def load_data(config_path, data_path):
     """ what does this function"""
     config_dict = config.import_yaml_config(config_path)
     # Chemin de destination local
@@ -139,6 +139,5 @@ def truncate_table(file_path):
     # Ouvrir le fichier en mode écriture
     with open(file_path, 'w') as file:
         file.write('')  # Écrire une chaîne vide
-
 
 

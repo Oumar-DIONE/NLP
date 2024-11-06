@@ -40,6 +40,7 @@ DATA_PATH = os.getenv('DATA_PATH')
 CONFIG_PATH = os.getenv('CONFIG_PATH')
 Output_X_PATH = os.getenv('Output_X_PATH')
 Output_Y_PATH = os.getenv('Output_Y_PATH')
+print(DATA_PATH, CONFIG_PATH)
 
 
 # Load Data

@@ -3,7 +3,7 @@ import os
 import yaml
 
 
-def import_yaml_config(filename_="/home/headless/work/NLP/config.yaml"):
+def import_yaml_config(filename_):
     """
     Cette fonction permet de récuper les élements de configurations notamment 
     ceux liés à la connexion au bucket des données
@@ -14,3 +14,6 @@ def import_yaml_config(filename_="/home/headless/work/NLP/config.yaml"):
         with open(filename_, "r", encoding="utf-8") as f:
             config = yaml.safe_load(f)
     return config
+
+
+
