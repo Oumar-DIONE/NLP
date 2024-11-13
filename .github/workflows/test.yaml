@@ -45,3 +45,5 @@ jobs:
             echo "matrice de confusion found in output."
           else
             echo "matrice de confusion not found in output." && exit 1
+
+          fi
