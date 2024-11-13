@@ -1,6 +1,6 @@
 configuration/config.yaml
 __pycache__/
-*.csv
+
 knn_venv/
 titanic/
 NLP_env/
