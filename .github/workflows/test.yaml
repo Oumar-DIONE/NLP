@@ -41,7 +41,7 @@ jobs:
 
       - name: Check for confusion matrix in output
         run: |
-          if grep -q "Confusion Matrix:" output.txt; then
-            echo "Confusion matrix found in output."
+          if grep -q "matrice de confusion:" output.txt; then
+            echo "matrice de confusion found in output."
           else
-            echo "Confusion matrix not found in output." && exit 1
+            echo "matrice de confusion not found in output." && exit 1
