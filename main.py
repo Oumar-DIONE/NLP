@@ -7,6 +7,7 @@ import sys
 import os
 import argparse
 from dotenv import load_dotenv
+import pandas as pd
 
 
 # Ajouter le chemin du dossier 'src/data' dans sys.path
@@ -49,9 +50,10 @@ print("Data path:", DATA_PATH)
 print("Config CONFIG_PATH:", CONFIG_PATH)
 
 # Load Data
-dataset = import_data.load_data(CONFIG_PATH, DATA_PATH)
+#dataset = import_data.load_data(CONFIG_PATH, DATA_PATH)
 # vider le contenu de la table emails qui est locument inutiles
 # car on a les données dans datasets (temporairement et c'est suffisants).
+dataset=pd.read_csv(DATA_PATH)
 #import_data.truncate_table(DATA_PATH)
 
 categorical = [var for var in dataset.columns if dataset[var].dtype == "O"]
