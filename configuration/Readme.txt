@@ -1,0 +1,1 @@
+créez un fichier yaml contenant les informations de connexions relatives à votre bucket (S3)

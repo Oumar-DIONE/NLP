@@ -33,15 +33,20 @@ parser.add_argument(
 args = parser.parse_args()
 
 # Charger les variables d'environnement à partir du fichier .env (si utilisé)
-load_dotenv()
+load_dotenv(dotenv_path=".env")
 
-# Récupérer le chemin des données depuis la variable d'environnement
-DATA_PATH = os.getenv('DATA_PATH')
-CONFIG_PATH = os.getenv('CONFIG_PATH')
-Output_X_PATH = os.getenv('Output_X_PATH')
-Output_Y_PATH = os.getenv('Output_Y_PATH')
-print(DATA_PATH, CONFIG_PATH)
+# Chemin vers le répertoire du projet
+project_root = os.path.dirname(os.path.abspath(__file__))
 
+# Récupérer et construire des chemins
+DATA_PATH = os.path.join(project_root, os.getenv("DATA_PATH"))
+CONFIG_PATH = os.path.join(project_root, os.getenv("CONFIG_PATH"))
+OUTPUT_X_PATH = os.path.join(project_root, os.getenv("OUTPUT_X_PATH"))
+OUTPUT_Y_PATH = os.path.join(project_root, os.getenv("OUTPUT_Y_PATH"))
+
+# Exemple d'utilisation
+print("Data path:", DATA_PATH)
+print("Config CONFIG_PATH:", CONFIG_PATH)
 
 # Load Data
 dataset = import_data.load_data(CONFIG_PATH, DATA_PATH)
@@ -59,19 +64,19 @@ numerical = [var for var in dataset.columns if dataset[var].dtype != "O"]
 
 X, Y = build_features.encoder(dataset)
 # Sauvegarder les données transfomées par l'étape  de préprocessing 
-X.to_csv(Output_X_PATH, index=False, encoding='utf-8')
-Y.to_csv(Output_Y_PATH, index=False, encoding='utf-8')
+X.to_csv(OUTPUT_X_PATH, index=False, encoding='utf-8')
+Y.to_csv(OUTPUT_Y_PATH, index=False, encoding='utf-8')
 x_train, y_train, x_test, y_test = build_features.split_scale(X, Y)
 # Vider les deux tables qui viennent d'être envoyées dans le bucket distant
-import_data.truncate_table(Output_X_PATH)
-import_data.truncate_table(Output_Y_PATH)
+import_data.truncate_table(OUTPUT_X_PATH)
+import_data.truncate_table(OUTPUT_Y_PATH)
 
 
 print("Le fichier CSV a été sauvegardé avec succès.")
 # Envoyer les données transfomées dans mon buckets S3 puis vider localement ces dataframes 
 BUCKET_NAME = os.getenv('BUCKET_NAME')
-import_data.save_data_in_s3(CONFIG_PATH, Output_X_PATH, path_in_s3="EMAIL_DATA/X.csv")
-import_data.save_data_in_s3(CONFIG_PATH, Output_Y_PATH, path_in_s3="EMAIL_DATA/Y.csv")# Build model
+import_data.save_data_in_s3(CONFIG_PATH, OUTPUT_X_PATH, path_in_s3="EMAIL_DATA/X.csv")
+import_data.save_data_in_s3(CONFIG_PATH, OUTPUT_Y_PATH, path_in_s3="EMAIL_DATA/Y.csv")# Build model
 
 classifier = train_evaluate.knn_model(
     n_neighbors=args.n_neighbors, x=x_train, y=y_train)
