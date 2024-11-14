@@ -55,7 +55,8 @@ print(project_root)
 #dataset = import_data.load_data(CONFIG_PATH, DATA_PATH)
 # vider le contenu de la table emails qui est locument inutiles
 # car on a les données dans datasets (temporairement et c'est suffisants).
-dataset=pd.read_csv(project_root+DATA_PATH)
+#dataset=pd.read_csv(project_root+'/'+DATA_PATH)
+dataset=pd.read_csv(DATA_PATH)
 #import_data.truncate_table(DATA_PATH)
 
 categorical = [var for var in dataset.columns if dataset[var].dtype == "O"]
