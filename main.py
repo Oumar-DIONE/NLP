@@ -44,15 +44,18 @@ DATA_PATH = os.path.join(project_root, os.getenv("DATA_PATH"))
 CONFIG_PATH = os.path.join(project_root, os.getenv("CONFIG_PATH"))
 OUTPUT_X_PATH = os.path.join(project_root, os.getenv("OUTPUT_X_PATH"))
 OUTPUT_Y_PATH = os.path.join(project_root, os.getenv("OUTPUT_Y_PATH"))
-
+OUTPUT_accuracy = os.path.join(project_root, os.getenv("OUTPUT_accuracy"))
 # Exemple d'utilisation
 print("Data path:", DATA_PATH)
 print("Config CONFIG_PATH:", CONFIG_PATH)
+print("Config CONFIG_PATH:", OUTPUT_accuracy)
+print(project_root)
 
 # Load Data
 #dataset = import_data.load_data(CONFIG_PATH, DATA_PATH)
 # vider le contenu de la table emails qui est locument inutiles
 # car on a les données dans datasets (temporairement et c'est suffisants).
+#dataset=pd.read_csv(project_root+'/'+DATA_PATH)
 dataset=pd.read_csv(DATA_PATH)
 #import_data.truncate_table(DATA_PATH)
 
@@ -89,4 +92,4 @@ y_pred = train_evaluate.make_prediction(x_test, classifier)
 
 # Evaluate model
 print("les nombres de voisins plus proches  est ", args.n_neighbors)
-train_evaluate.evaluate(y_test, y_pred)
+train_evaluate.evaluate(y_test, y_pred, filename=OUTPUT_accuracy)

@@ -1,5 +1,6 @@
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix
+import pandas as pd
 
 
 def knn_model(n_neighbors, x, y, p=2, metric_="minkowski"):
@@ -17,10 +18,13 @@ def make_prediction(x, model):
     return y
 
 
-def evaluate(y1, y2):
+def evaluate(y1, y2, filename):
     """ show the confuse matrix """
     cm = confusion_matrix(y1, y2)
     accurace_ = accuracy_score(y1, y2)
+    """ filename for storing the accurcy """
+    df = pd.DataFrame(data=[accurace_], columns=["accurate"])
+    df.to_csv(filename)
     print(f"{accurace_:.1%} de bonnes réponses sur les données de test pour validation")
     print("matrice de confusion")
     print(cm)

@@ -47,3 +47,10 @@ jobs:
             echo "matrice de confusion not found in output." && exit 1
 
           fi
+      - name: Model accuracy
+        run: | 
+          if python tests/score.py | grep -q "le modèle semble  pas si mal"; then
+            echo "accuracy >0.8 plus de 80% bonnes réponses sur les données de test pour validation"
+          else 
+            echo "accuracy <=0.8 moins de 80% bonnes réponses sur les données de test pour validation" && exit 1
+          fi
