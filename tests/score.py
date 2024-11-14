@@ -11,9 +11,9 @@ OUTPUT_accuracy = os.path.join(project_root, os.getenv("OUTPUT_accuracy"))
 score = pd.read_csv(OUTPUT_accuracy)
 accuracy=score.values[0,1]
 if( accuracy>0.7):
-    print(" le modèle semble  pas si mal")
+    print("le modèle semble  pas si mal")
 else:
     print("le modèle n'est trés fiable")
 
-
+print(accuracy)
 

@@ -49,9 +49,8 @@ jobs:
           fi
       - name: Model accuracy
         run: | 
-          python tests/score.py
-          if grep -q "le modèle semble pas si mal" output.txt; then
-            echo "accuracy >0.7 plus de 70% bonnes réponses sur les données de test pour validation"
+          if python tests/score.py | grep -q "le modèle semble  pas si mal"; then
+            echo "accuracy >0.8 plus de 80% bonnes réponses sur les données de test pour validation"
           else 
-            echo "accuracy <=0.7 moins de 70% bonnes réponses sur les données de test pour validation" && exit 1
+            echo "accuracy <=0.8 moins de 80% bonnes réponses sur les données de test pour validation" && exit 1
           fi
