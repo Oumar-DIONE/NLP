@@ -1,7 +1,9 @@
 FROM ubuntu:22.04
+# Créez le répertoire de travail
+RUN mkdir -p /NLP
 # Creation du repertoire qui va contenir l'ensemble des dossiers, scripts et fichiers nécessaires 
 # au bon fonctionnement de notre application 
-WORKDIR /classification_K_Nearest_Neighbour
+WORKDIR /NLP
 # creation de l'ensemble de ces sous dossiers
 RUN mkdir -p data configuration
 RUN mkdir -p data/raw data/derived
@@ -13,9 +15,11 @@ COPY requirements.txt .
 RUN pip install -r requirements.txt
 COPY main.py .
 COPY src ./src
-COPY .env 
+COPY env.txt .env
 COPY emails.csv ./data/raw/emails.csv
 COPY config.yaml ./configuration/config.yaml
+#ENV DATA_PATH=/classification_K_Nearest_Neighbour/data/raw/emails.csv
+#ENV CONFIG_PATH=/classification_K_Nearest_Neighbour/configuration/config.yaml
 COPY X.csv ./data/derived/X.csv
-COPY y.csv ./data/derived/X.csv
+COPY Y.csv ./data/derived/Y.csv
 CMD ["python3", "main.py"]
