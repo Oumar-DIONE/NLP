@@ -3,7 +3,7 @@ name: Python package
 on:
   push:
     branches:
-      - main
+      - dev2
 
 jobs:
   build:
@@ -29,7 +29,7 @@ jobs:
 
       - name: Test main.py with pylint
         run: |
-          pylint main.py --fail-under=6  # Vérifie la qualité du code avec pylint
+          pylint main.py --fail-under=8  # Vérifie la qualité du code avec pylint
 
       - name: Run main.py and capture output
         id: run-main
