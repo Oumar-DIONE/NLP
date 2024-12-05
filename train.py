@@ -85,6 +85,7 @@ BUCKET_NAME = os.getenv('BUCKET_NAME')
 # import_data.truncate_table(OUTPUT_X_PATH)
 # import_data.truncate_table(OUTPUT_Y_PATH)
 
+
 classifier = train_evaluate.knn_model(
     n_neighbors=args.n_neighbors, x=x_train, y=y_train)
 # make prediction on test set
