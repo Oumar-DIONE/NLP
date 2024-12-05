@@ -24,4 +24,6 @@ six
 threadpoolctl
 tzdata
 urllib3
-
+uvicorn
+fastapi
+dotenv

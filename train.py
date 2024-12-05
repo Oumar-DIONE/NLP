@@ -8,6 +8,7 @@ import os
 import argparse
 from dotenv import load_dotenv
 import pandas as pd
+import joblib
 
 
 # Ajouter le chemin du dossier 'src/data' dans sys.path
@@ -52,12 +53,14 @@ print("Config CONFIG_PATH:", OUTPUT_accuracy)
 print(project_root)
 
 # Load Data
-#dataset = import_data.load_data(CONFIG_PATH, DATA_PATH)
+# dataset = import_data.load_data(CONFIG_PATH, DATA_PATH)
 # vider le contenu de la table emails qui est locument inutiles
 # car on a les données dans datasets (temporairement et c'est suffisants).
-#dataset=pd.read_csv(project_root+'/'+DATA_PATH)
-dataset=pd.read_csv(DATA_PATH)
-#import_data.truncate_table(DATA_PATH)
+# dataset=pd.read_csv(project_root+'/'+DATA_PATH)
+
+dataset = pd.read_csv(DATA_PATH)
+
+# import_data.truncate_table(DATA_PATH)
 
 categorical = [var for var in dataset.columns if dataset[var].dtype == "O"]
 numerical = [var for var in dataset.columns if dataset[var].dtype != "O"]
@@ -74,18 +77,22 @@ Y.to_csv(OUTPUT_Y_PATH, index=False, encoding='utf-8')
 x_train, y_train, x_test, y_test = build_features.split_scale(X, Y)
 
 
-
 print("Le fichier CSV a été sauvegardé avec succès.")
 # Envoyer les données transfomées dans mon buckets S3 puis vider localement ces dataframes 
 BUCKET_NAME = os.getenv('BUCKET_NAME')
-#import_data.save_data_in_s3(CONFIG_PATH, OUTPUT_X_PATH, path_in_s3="EMAIL_DATA/X.csv")
-#import_data.save_data_in_s3(CONFIG_PATH, OUTPUT_Y_PATH, path_in_s3="EMAIL_DATA/Y.csv")# Build model
+# import_data.save_data_in_s3(CONFIG_PATH, OUTPUT_X_PATH, path_in_s3="EMAIL_DATA/X.csv")
+# import_data.save_data_in_s3(CONFIG_PATH, OUTPUT_Y_PATH, path_in_s3="EMAIL_DATA/Y.csv")# Build model
 # Vider les deux tables qui viennent d'être envoyées dans le bucket distant
 import_data.truncate_table(OUTPUT_X_PATH)
 import_data.truncate_table(OUTPUT_Y_PATH)
 
 classifier = train_evaluate.knn_model(
     n_neighbors=args.n_neighbors, x=x_train, y=y_train)
+# Sauvegarder le modèle sous format .joblib
+
+joblib.dump(classifier, 'classifier.joblib')
+
+print("Le modèle a été sauvegardé sous le nom 'model.joblib'.")
 # make prediction on test set
 
 y_pred = train_evaluate.make_prediction(x_test, classifier)
@@ -93,3 +100,6 @@ y_pred = train_evaluate.make_prediction(x_test, classifier)
 # Evaluate model
 print("les nombres de voisins plus proches  est ", args.n_neighbors)
 train_evaluate.evaluate(y_test, y_pred, filename=OUTPUT_accuracy)
+
+
+

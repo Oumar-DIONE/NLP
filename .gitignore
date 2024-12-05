@@ -4,3 +4,4 @@ __pycache__/
 knn_venv/
 titanic/
 NLP_env/
+classifier.joblib

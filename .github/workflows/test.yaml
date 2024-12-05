@@ -27,12 +27,12 @@ jobs:
       - name: Install pylint
         run: pip install pylint  # Cette étape installe pylint
 
-      - name: Test main.py with pylint
+      - name: Test train.py with pylint
         run: |
-          pylint main.py --fail-under=8  # Vérifie la qualité du code avec pylint
+          pylint train.py --fail-under=8  # Vérifie la qualité du code avec pylint
 
-      - name: Run main.py and capture output
-        id: run-main
+      - name: Run train.py and capture output
+        id: run-train
         run: |
           python main.py > output.txt  # Exécute le script et capture la sortie dans un fichier
 
