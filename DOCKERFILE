@@ -16,10 +16,10 @@ RUN pip install -r requirements.txt
 COPY main.py .
 COPY src ./src
 COPY .env .env
-COPY emails.csv ./data/raw/emails.csv
+COPY data/raw/emails.csv ./data/raw/emails.csv
 #COPY config.yaml ./configuration/config.yaml
 #ENV DATA_PATH=/NLP/data/raw/emails.csv
 #ENV CONFIG_PATH=/NLP/configuration/config.yaml
-COPY X.csv ./data/derived/X.csv
-COPY Y.csv ./data/derived/Y.csv
+COPY data/derived/X.csv ./data/derived/X.csv
+COPY data/derived/Y.csv ./data/derived/Y.csv
 CMD ["python3", "train.py"]
