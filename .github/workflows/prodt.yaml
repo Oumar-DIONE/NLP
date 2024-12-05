@@ -28,7 +28,12 @@ jobs:
       
       # Step 4: Build and push Docker image to Docker Hub
       - name: Build and push Docker image
+      
         uses: docker/build-push-action@v6
         with:
+          context: https://github.com/Oumar-DIONE/NLP.git#main  # Utilisation de la branche main comme référence
+          file: ./DOCKERFILE
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/myapp:latest
+
+
