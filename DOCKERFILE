@@ -22,4 +22,4 @@ COPY config.yaml ./configuration/config.yaml
 #ENV CONFIG_PATH=/NLP/configuration/config.yaml
 COPY X.csv ./data/derived/X.csv
 COPY Y.csv ./data/derived/Y.csv
-CMD ["python3", "main.py"]
+CMD ["python3", "train.py"]

@@ -8,6 +8,7 @@ import os
 import argparse
 from dotenv import load_dotenv
 import pandas as pd
+import joblib
 
 
 # Ajouter le chemin du dossier 'src/data' dans sys.path
@@ -87,6 +88,13 @@ import_data.truncate_table(OUTPUT_Y_PATH)
 classifier = train_evaluate.knn_model(
     n_neighbors=args.n_neighbors, x=x_train, y=y_train)
 # make prediction on test set
+classifier = train_evaluate.knn_model(
+    n_neighbors=args.n_neighbors, x=x_train, y=y_train)
+# Sauvegarder le modèle sous format .joblib
+
+joblib.dump(classifier, 'classifier.joblib')
+
+print("Le modèle a été sauvegardé sous le nom 'model.joblib'.")
 
 y_pred = train_evaluate.make_prediction(x_test, classifier)
 
