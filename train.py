@@ -79,11 +79,11 @@ x_train, y_train, x_test, y_test = build_features.split_scale(X, Y)
 print("Le fichier CSV a été sauvegardé avec succès.")
 # Envoyer les données transfomées dans mon buckets S3 puis vider localement ces dataframes 
 BUCKET_NAME = os.getenv('BUCKET_NAME')
-#import_data.save_data_in_s3(CONFIG_PATH, OUTPUT_X_PATH, path_in_s3="EMAIL_DATA/X.csv")
-#import_data.save_data_in_s3(CONFIG_PATH, OUTPUT_Y_PATH, path_in_s3="EMAIL_DATA/Y.csv")# Build model
+# import_data.save_data_in_s3(CONFIG_PATH, OUTPUT_X_PATH, path_in_s3="EMAIL_DATA/X.csv")
+# import_data.save_data_in_s3(CONFIG_PATH, OUTPUT_Y_PATH, path_in_s3="EMAIL_DATA/Y.csv")# Build model
 # Vider les deux tables qui viennent d'être envoyées dans le bucket distant
-import_data.truncate_table(OUTPUT_X_PATH)
-import_data.truncate_table(OUTPUT_Y_PATH)
+# import_data.truncate_table(OUTPUT_X_PATH)
+# import_data.truncate_table(OUTPUT_Y_PATH)
 
 classifier = train_evaluate.knn_model(
     n_neighbors=args.n_neighbors, x=x_train, y=y_train)
