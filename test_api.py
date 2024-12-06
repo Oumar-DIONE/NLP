@@ -1,14 +1,22 @@
 import requests
 
 # URL de votre API
-url = 'https://user-odione-90797-0.user.lab.sspcloud.fr/proxy/5000/predict'  # Remplacez par l'URL de votre API
+url = "https://user-odione-90797-0.user.lab.sspcloud.fr/proxy/5000/predict"
 
-# Envoyer une requête GET
-response = requests.get(url)
+# Paramètres que vous souhaitez envoyer à l'API
+params = {
+    "sex": "female",
+    "index": 1,
+    "fare": 25.0,
+    "embarked": "C"
+}
 
-# Vérifier si la requête a réussi (status code 200)
+# Effectuer la requête GET avec les paramètres
+response = requests.get(url, params=params)
+
+# Vérifier si la requête a réussi
 if response.status_code == 200:
-    print("Réponse reçue avec succès:")
-    print(response.json())  # Affiche la réponse sous forme JSON
+    # Afficher la réponse JSON
+    print(response.json())
 else:
     print(f"Erreur {response.status_code}: {response.text}")
