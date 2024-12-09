@@ -13,6 +13,7 @@ RUN apt-get -y update && \
 # Install project dependencies
 COPY requirements.txt .
 RUN pip install -r requirements.txt
+COPY api ./api
 COPY train.py .
 COPY src ./src
 COPY .env .env
@@ -22,4 +23,6 @@ COPY data/raw/emails.csv ./data/raw/emails.csv
 #ENV CONFIG_PATH=/NLP/configuration/config.yaml
 COPY data/derived/X.csv ./data/derived/X.csv
 COPY data/derived/Y.csv ./data/derived/Y.csv
-CMD ["python3", "train.py"]
+#pour exécuter le script api/run.sh au lancement du conteneur
+CMD ["bash", "-c", "./api/run.sh"]
+#CMD ["python3", "train.py"]
