@@ -24,5 +24,5 @@ COPY data/raw/emails.csv ./data/raw/emails.csv
 COPY data/derived/X.csv ./data/derived/X.csv
 COPY data/derived/Y.csv ./data/derived/Y.csv
 #pour exécuter le script api/run.sh au lancement du conteneur
-CMD ["bash", "-c", "./api/run.sh"]
 #CMD ["python3", "train.py"]
+CMD ["bash", "-c", "./api/run.sh"]
