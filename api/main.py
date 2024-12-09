@@ -4,8 +4,8 @@ import pandas as pd
 
 # Charger le modèle pré-entraîné
 model = load('classifier.joblib')
-X = pd.read_csv("X.csv")  # Charger les données directement sous forme de tableau
-
+X = pd.read_csv("api/X.csv") # Charger les données directement sous forme de tableau
+  
 # Initialiser l'application FastAPI
 app = FastAPI(
     title="Prédiction de survie sur le Titanic",
