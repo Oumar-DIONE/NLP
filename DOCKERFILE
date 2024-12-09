@@ -7,6 +7,7 @@ WORKDIR /NLP
 # creation de l'ensemble de ces sous dossiers
 RUN mkdir -p data configuration
 RUN mkdir -p data/raw data/derived
+RUN mkdir -p Output
 # Install Python
 RUN apt-get -y update && \
     apt-get install -y python3-pip
@@ -18,6 +19,7 @@ COPY train.py .
 COPY src ./src
 COPY .env .env
 COPY data/raw/emails.csv ./data/raw/emails.csv
+COPY Output/accuracy.csv ./Output/accuracy.csv
 #COPY config.yaml ./configuration/config.yaml
 #ENV DATA_PATH=/NLP/data/raw/emails.csv
 #ENV CONFIG_PATH=/NLP/configuration/config.yaml
